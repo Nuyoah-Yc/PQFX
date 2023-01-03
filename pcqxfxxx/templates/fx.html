@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <form method="post">
+                {% csrf_token %}
+                <div class="panel-heading">
+                    <button type="submit" class="btn btn-primary" id="1">开始数据分析</button>
+{#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
+                    <a class="primary">{{ data }}</a>
+                </div>
+            </form>
+            <!--当按按钮时，会将按钮的id值传到后台(待定)-->
+            <hr/>
+            <div>
+                1
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <form method="post">
+                {% csrf_token %}
+                <div class="panel-heading">
+                    <button type="submit" class="btn btn-primary" id="1">开始爬取数据</button>
+{#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
+                    <a class="primary">{{ data }}</a>
+                </div>
+            </form>
+            <!--当按按钮时，会将按钮的id值传到后台(待定)-->
+            <hr/>
+            <h4>数据库前5条数据</h4>
+            <div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>电影名称</th>
+                            <th>电影网址</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for mz1 in un1 %}
+                            <tr>
+                                <td>{{ mz1.id }}</td>
+                                <td>{{ mz1.name }}</td>
+                                <td>{{ mz1.url }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>播放</th>
+                            <th>评论</th>
+                            <th>点赞</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for nn1 in nr1 %}
+                            <tr>
+                                <td>{{ nn1.id }}</td>
+                                <td>{{ nn1.bf }}</td>
+                                <td>{{ nn1.pl }}</td>
+                                <td>{{ nn1.dz }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h4>数据库后5条数据</h4>
+            <div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>电影名称</th>
+                            <th>电影网址</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for mz2 in un2 %}
+                            <tr>
+                                <td>{{ mz2.id }}</td>
+                                <td>{{ mz2.name }}</td>
+                                <td>{{ mz2.url }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>播放</th>
+                            <th>评论</th>
+                            <th>点赞</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for nn2 in nr2 %}
+                            <tr>
+                                <td>{{ nn2.id }}</td>
+                                <td>{{ nn2.bf }}</td>
+                                <td>{{ nn2.pl }}</td>
+                                <td>{{ nn2.dz }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
