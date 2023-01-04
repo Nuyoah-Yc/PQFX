@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button type="submit" class="btn btn-primary" id="1">post请求1</button>
+                <button type="submit" class="btn btn-primary" id="2">post请求2</button>
+                <a class="primary">{{ data }}</a>
+            </div>
+            <!--当按按钮时，会将按钮的id值传到后台(待定)-->
+            <script>
+                $(function () {
+                    $("#1").click(function () {
+                        $.ajax({
+                            url: "/pqfx/text/",
+                            type: "POST",
+                            data: {
+                                "id": 1
+                            },
+                            success: function (res) {
+                                console.log(res);
+                            }
+                        })
+                    });
+                    $("#2").click(function () {
+                        $.ajax({
+                            url: "/pqfx/text/",
+                            type: "post",
+                            data: {
+                                "id": 2
+                            },
+                            success: function (res) {
+                                console.log(res);
+                            }
+                        })
+                    });
+                });
+            </script>
+            <hr/>
+            <div>
+                1
+            </div>
+        </div>
+    </div>
+{% endblock %}

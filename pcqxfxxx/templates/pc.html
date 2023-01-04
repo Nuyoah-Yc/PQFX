@@ -2,15 +2,40 @@
 {% block content %}
     <div class="container">
         <div class="panel panel-default">
-            <form method="post">
-                {% csrf_token %}
-                <div class="panel-heading">
-                    <button type="submit" class="btn btn-primary" id="1">开始爬取数据</button>
-{#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
-                    <a class="primary">{{ data }}</a>
-                </div>
-            </form>
+            <div class="panel-heading">
+                <button type="submit" class="btn btn-primary" id="1">开始爬取数据</button>
+                <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>
+                <a class="primary">{{ data }}</a>
+            </div>
             <!--当按按钮时，会将按钮的id值传到后台(待定)-->
+            <script>
+                $(function () {
+                    $("#1").click(function () {
+                        $.ajax({
+                            url: "/pqfx/pc/",
+                            type: "GET",
+                            data: {
+                                "id": 1
+                            },
+                            success: function (res) {
+                                console.log(res);
+                            }
+                        })
+                    });
+                    $("#2").click(function () {
+                        $.ajax({
+                            url: "/pqfx/pc/",
+                            type: "GET",
+                            data: {
+                                "id": 2
+                            },
+                            success: function (res) {
+                                console.log(res);
+                            }
+                        })
+                    });
+                });
+            </script>
             <hr/>
             <h4>数据库前5条数据</h4>
             <div>

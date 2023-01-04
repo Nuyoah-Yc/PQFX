@@ -7,4 +7,5 @@ urlpatterns = [
     path('qx/', views.qx),
     path('fx/', views.fx),
     path('xx/', views.xx),
+    path('text/', views.text),
 ]
