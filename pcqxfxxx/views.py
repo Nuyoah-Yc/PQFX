@@ -1,34 +1,26 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from .models import *
 # 采集库
 import requests
 # 解析库
 from bs4 import BeautifulSoup
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 # 时间库
-import time
 # 进度条库
 from tqdm import tqdm
+
+from .models import *
+
+
 # 线程库
-import threading
 # Create your views here.
 
-def pc(request):
-    if request.method == 'GET':
-        # 判断数据库是否有数据
-        if url_name.objects.all():
-            # 获取数据库中的前5条数据
-            un1 = url_name.objects.order_by('id')[:5]
-            nr1 = nr_list.objects.order_by('id')[:5]
-            # 获取数据库中的后5条数据
-            un2 = url_name.objects.order_by('-id')[:5]
-            nr2 = nr_list.objects.order_by('-id')[:5]
-            data = '有数据,清空再爬取'
-            return render(request, 'pc.html', locals())
-        else:
-            data = '无数据,可以爬取了'
-            return render(request, 'pc.html', locals())
-    else:
+
+@csrf_exempt
+def pc_Ajax(request):
+    # 获取前端POST请求的数据
+    vlus = request.POST.get('id')
+    if vlus == '1':
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0'
         }
@@ -58,26 +50,80 @@ def pc(request):
                 bf = soup1.select('div#content h1 span.year')[0].text
             except:
                 bf = ''
+            try:
                 pl = soup1.select('div.mod-hd h2 span.pl a')[0].text
+            except:
+                pl = ''
             try:
                 dz = soup1.select('div.rating_self strong.rating_num')[0].text
             except:
                 dz = ''
             nr_list.objects.create(bf=bf, pl=pl, dz=dz)
-        # 获取数据库中的前5条数据
-        un1 = url_name.objects.order_by('id')[:5]
-        nr1 = nr_list.objects.order_by('id')[:5]
-        # 获取数据库中的后5条数据
-        un2 = url_name.objects.order_by('-id')[:5]
-        nr2 = nr_list.objects.order_by('-id')[:5]
-        data = '数据爬取成功'
-        return render(request, 'pc.html', locals())
+        data = {
+            'text': '数据爬取完成',
+        }
+        return JsonResponse(data)
+    elif vlus == '2':
+        if url_name.objects.all():
+            # 清空数据库
+            url_name.objects.all().delete()
+            nr_list.objects.all().delete()
+            data = {
+                'text': '数据清空完成',
+            }
+            return JsonResponse(data)
+        else:
+            data = {
+                'text': '数据库无数据',
+            }
+            return JsonResponse(data)
+
+
+@csrf_exempt
+def qx_Ajax(request):
+    pass
+
+
+@csrf_exempt
+def fx_Ajax(request):
+    pass
+
+
+@csrf_exempt
+def xx_Ajax(request):
+    pass
+
+
+@csrf_exempt
+def text_Ajax(request):
+    pass
+
+
+
+def pc(request):
+    if request.method == 'GET':
+        # 判断数据库是否有数据
+        if url_name.objects.all():
+            # 获取数据库中的前5条数据
+            un1 = url_name.objects.order_by('id')[:5]
+            nr1 = nr_list.objects.order_by('id')[:5]
+            # 获取数据库中的后5条数据
+            un2 = url_name.objects.order_by('-id')[:5]
+            nr2 = nr_list.objects.order_by('-id')[:5]
+            data = '有数据,清空再爬取'
+            return render(request, 'pc.html', locals())
+        else:
+            data = '无数据,可以爬取了'
+            return render(request, 'pc.html', locals())
+
+
 def qx(request):
     if request.method == 'GET':
         return render(request, 'qx.html')
     else:
         data = '数据清洗完成'
         return render(request, 'qx.html', locals())
+
 
 def fx(request):
     if request.method == 'GET':
@@ -86,6 +132,7 @@ def fx(request):
         data = '数据分析完成'
         return render(request, 'fx.html', locals())
 
+
 def xx(request):
     if request.method == 'GET':
         return render(request, 'xx.html')
@@ -93,3 +140,6 @@ def xx(request):
         data = '机器学习完成'
         return render(request, 'xx.html', locals())
 
+
+def text(request):
+    return render(request, 'text.html')

@@ -12,25 +12,31 @@
                 $(function () {
                     $("#1").click(function () {
                         $.ajax({
-                            url: "/pqfx/pc/",
-                            type: "GET",
+                            url: "/pqfx/pc_Ajax/",
+                            type: "POST",
                             data: {
                                 "id": 1
                             },
-                            success: function (res) {
-                                console.log(res);
+                            dataType: "json",
+                            success: function (data) {
+                                alert(data.text);
+                                // 刷新页面
+                                window.location.reload();
                             }
                         })
                     });
                     $("#2").click(function () {
                         $.ajax({
-                            url: "/pqfx/pc/",
-                            type: "GET",
+                            url: "/pqfx/pc_Ajax/",
+                            type: "POST",
                             data: {
                                 "id": 2
                             },
-                            success: function (res) {
-                                console.log(res);
+                            dataType: "json",
+                            success: function (data) {
+                                alert(data.text);
+                                //刷新页面
+                                window.location.reload();
                             }
                         })
                     });
@@ -43,7 +49,7 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>id</th>
+                            <th scope="row">id</th>
                             <th>电影名称</th>
                             <th>电影网址</th>
                         </tr>
