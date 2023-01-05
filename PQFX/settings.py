@@ -81,6 +81,7 @@ WSGI_APPLICATION = 'PQFX.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# Mysql数据库配置
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -91,6 +92,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+# Redis数据库配置
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
