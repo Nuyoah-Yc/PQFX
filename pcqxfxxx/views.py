@@ -2,15 +2,17 @@
 import requests
 # 解析库
 from bs4 import BeautifulSoup
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+# redis库
+from django_redis import get_redis_connection
 # 时间库
+import time
 # 进度条库
 from tqdm import tqdm
 
 from .models import *
-
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 # 线程库
 # Create your views here.
