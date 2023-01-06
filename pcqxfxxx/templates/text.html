@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <form method="post">
+                {% csrf_token %}
+                <div class="panel-heading">
+                    <button type="submit" class="btn btn-primary" id="1">测试</button>
+{#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
+                    <a class="primary">{{ data }}</a>
+                </div>
+            </form>
+            <!--当按按钮时，会将按钮的id值传到后台(待定)-->
+            <script>
+                $(function () {
+                    $("#1").click(function () {
+                        $.ajax({
+                            url: "/pqfx/text_Ajax/",
+                            type: "post",
+                            data: {
+                                "id": $(this).attr("id")
+                            },
+                            success: function (data) {
+                                alert(data.text);
+                            }
+                        })
+                    })
+                })
+            </script>
+            <hr/>
+            <div>
+                1
+            </div>
+        </div>
+    </div>
+{% endblock %}

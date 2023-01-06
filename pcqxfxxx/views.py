@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 # redis库
 from django_redis import get_redis_connection
+import redis
 # 时间库
 import time
 # 进度条库
@@ -83,23 +84,60 @@ def pc_Ajax(request):
 
 @csrf_exempt
 def qx_Ajax(request):
-    pass
+    if request.POST.get('id') == '1':
+        # 数据集中存在字段缺失、空行、单位不统一、有重复数据等问题，请你使用NumPy和Pandas对数据进行清洗，具体要求如下：
+        # 1.缺失的体重和年龄字段使用均值填充；
+        # 2.缺失的爱好字段使用高频词填充；
+        # 3.身高单位统一为cm；
+        # 4.体重单位统一为kg；
+        # 5.空行直接删除；
+        # 6.重复数据只保留一条；
+        # 7.将清洗后的数据通过DjangoORM保存到MySQL数据库中
+        pass
+
 
 
 @csrf_exempt
 def fx_Ajax(request):
-    pass
+    if request.POST.get('id') == '1':
+        # 【任务1】读取所需数据集后，给用户数据中增加省份字段记录用户的归属地，分析该视频网站中会员用户在中国各地区的分布情况并绘制出会员分布图。绘图要求如下：
+        # 1.使用PyEcharts库绘制会员分布地图；
+        # 2.使用Django框架在前端页面中渲染展示会员分布图；
+        # 【任务2】读取所需数据集后，分析不同类型的用户留存情况，并绘制用户留存矩阵图, 横轴为不同类型的用户留存率，纵轴为活跃用户的数量。绘图要求如下：
+        # 1.使用PyEcharts库绘制留存矩阵图；
+        # 2.使用Django框架在前端页面中渲染展示留存矩阵图
+        pass
 
 
 @csrf_exempt
 def xx_Ajax(request):
-    pass
+    if request.POST.get('id') == '1':
+        # 1.使用DjangoORM读取数据库中的用户日志数据；
+        # 2.对数据进行清洗和处理，将处理后的数据保存为CSV数据；
+        # 3.根据任务要求使用Pandas读取CSV数据进行特征工程；
+        # 4.划分训练集和测试集；
+        # 5.构建机器学习模型；
+        # 6.编写模型训练相关代码，完成模型训练；
+        # 7.使用PyEcharts库对测试数据的预测结果和真实结果进行可视化，并使用Django在前端页面中渲染展示；
+        # 8.将训练好的模型保存。
+        pass
 
 
 @csrf_exempt
 def text_Ajax(request):
-    pass
-
+    if request.POST.get('id') == '1':
+        # 读取数据库url_name表的name列的数据
+        name_list = url_name.objects.values_list('name','url')
+        # 启用redis数据库
+        conn = get_redis_connection('default2')
+        # for sj in name_list:
+        #     conn.set(sj[0], sj[1])
+        # 写入redis数据库
+        conn.set('七宗罪', 'https://www.bilibili.com/video/BV1J7411x7Zp')
+        conn.save()
+        conn.get('七宗罪')
+        print(conn.get('七宗罪'))
+        return JsonResponse({'text': '数据接收成功'})
 
 
 def pc(request):
@@ -144,4 +182,8 @@ def xx(request):
 
 
 def text(request):
-    return render(request, 'text.html')
+    if request.method == 'GET':
+        return render(request, 'text.html')
+    else:
+        data = '文本处理完成'
+        return render(request, 'text.html', locals())
