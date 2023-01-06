@@ -112,10 +112,20 @@ def fx_Ajax(request):
 @csrf_exempt
 def xx_Ajax(request):
     if request.POST.get('id') == '1':
+        # [任务1]
         # 1.使用DjangoORM读取数据库中的用户日志数据；
         # 2.对数据进行清洗和处理，将处理后的数据保存为CSV数据；
         # 3.根据任务要求使用Pandas读取CSV数据进行特征工程；
         # 4.划分训练集和测试集；
+        # 5.构建机器学习模型；
+        # 6.编写模型训练相关代码，完成模型训练；
+        # 7.使用PyEcharts库对测试数据的预测结果和真实结果进行可视化，并使用Django在前端页面中渲染展示；
+        # 8.将训练好的模型保存。
+        # [任务2]
+        # 1.使用DjangoORM读取数据库中的广告收益数据进行数据清洗及处理；
+        # 2.将清洗处理后的数据缓存到Redis数据库中；
+        # 3.从Redis中读取数据进行特征工程；
+        # 4.数据集划分；
         # 5.构建机器学习模型；
         # 6.编写模型训练相关代码，完成模型训练；
         # 7.使用PyEcharts库对测试数据的预测结果和真实结果进行可视化，并使用Django在前端页面中渲染展示；
@@ -129,14 +139,22 @@ def text_Ajax(request):
         # 读取数据库url_name表的name列的数据
         name_list = url_name.objects.values_list('name','url')
         # 启用redis数据库
-        conn = get_redis_connection('default2')
-        # for sj in name_list:
-        #     conn.set(sj[0], sj[1])
-        # 写入redis数据库
-        conn.set('七宗罪', 'https://www.bilibili.com/video/BV1J7411x7Zp')
+        conn = get_redis_connection('default')
+        sj = conn.get('name_list')
+        sj = sj.decode('utf-8')
         conn.save()
-        conn.get('七宗罪')
-        print(conn.get('七宗罪'))
+        for i in name_list:
+            print(i[0],i[1])
+
+        # keys = [key.decode() for key in conn.keys()]
+        # # 显示所有的vlaue
+        # for key in keys:
+        #     print(key, conn.get(key).decode())
+
+
+
+
+
         return JsonResponse({'text': '数据接收成功'})
 
 
@@ -185,5 +203,6 @@ def text(request):
     if request.method == 'GET':
         return render(request, 'text.html')
     else:
+        time.sleep(1)
         data = '文本处理完成'
         return render(request, 'text.html', locals())
