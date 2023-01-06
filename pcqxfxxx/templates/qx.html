@@ -11,6 +11,22 @@
                 </div>
             </form>
             <!--当按按钮时，会将按钮的id值传到后台(待定)-->
+            <script>
+                $(function () {
+                    $("#1").click(function () {
+                        $.ajax({
+                            url: "/pqfx/qx_Ajax/",
+                            type: "post",
+                            data: {
+                                "id": '1',
+                            },
+                            success: function (data) {
+                                alert(data);
+                            }
+                        })
+                    })
+                })
+            </script>
             <hr/>
             <div>
                 1
