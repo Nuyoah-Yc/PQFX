@@ -137,14 +137,14 @@ def xx_Ajax(request):
 def text_Ajax(request):
     if request.POST.get('id') == '1':
         # 读取数据库url_name表的name列的数据
-        name_list = url_name.objects.values_list('name','url')
-        # 启用redis数据库
-        conn = get_redis_connection('default')
-        sj = conn.get('name_list')
-        sj = sj.decode('utf-8')
-        conn.save()
-        for i in name_list:
-            print(i[0],i[1])
+        # name_list = url_name.objects.values_list('name','url')
+        # # 启用redis数据库
+        # conn = get_redis_connection('default')
+        # sj = conn.get('name_list')
+        # sj = sj.decode('utf-8')
+        # # conn.save()
+        # for i in name_list:
+        #     print(i[0],i[1])
 
         # keys = [key.decode() for key in conn.keys()]
         # # 显示所有的vlaue
@@ -200,9 +200,5 @@ def xx(request):
 
 
 def text(request):
-    if request.method == 'GET':
-        return render(request, 'text.html')
-    else:
-        time.sleep(1)
-        data = '文本处理完成'
-        return render(request, 'text.html', locals())
+    data = '文本处理完成'
+    return render(request, 'text.html', locals())
