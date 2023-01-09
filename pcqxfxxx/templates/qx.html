@@ -2,14 +2,12 @@
 {% block content %}
     <div class="container">
         <div class="panel panel-default">
-            <form method="post">
-                {% csrf_token %}
-                <div class="panel-heading">
-                    <button type="submit" class="btn btn-primary" id="1">开始清洗数据</button>
-{#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
-                    <a class="primary">{{ data }}</a>
-                </div>
-            </form>
+            <div class="panel-heading">
+                <input type="file" name="upload" id="file_uploads" required/>
+                <input type="button" onclick="uploads()" value="上传提交" id="file_up">
+                <button type="submit" class="btn btn-primary" id="1">开始清洗数据</button>
+                <a class="primary">{{ data }}</a>
+            </div>
             <!--当按按钮时，会将按钮的id值传到后台(待定)-->
             <script>
                 $(function () {
@@ -21,7 +19,25 @@
                                 "id": '1',
                             },
                             success: function (data) {
-                                alert(data);
+                                alert(data.text);
+                            }
+                        })
+                    })
+                    //上传文件
+                    $("#file_up").click(function () {
+                        var formData = new FormData();
+                        formData.append("file", $("#file_uploads")[0].files[0]);
+                        $.ajax({
+                            url: "/pqfx/file_up/",
+                            type: "post",
+                            data: formData,
+                            id: 'file_up',
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                alert(data.text);
+                                //刷新页面
+                                window.location.reload();
                             }
                         })
                     })

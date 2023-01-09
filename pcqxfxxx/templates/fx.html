@@ -6,7 +6,7 @@
                 {% csrf_token %}
                 <div class="panel-heading">
                     <button type="submit" class="btn btn-primary" id="1">开始数据分析</button>
-{#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
+                    {#                    <button type="submit" class="btn btn-primary" id="2">清除库中数据</button>#}
                     <a class="primary">{{ data }}</a>
                 </div>
             </form>
@@ -29,8 +29,28 @@
             </script>
             <hr/>
             <div>
-                1
+                <div id="bar" style="width:1000px; height:600px;"></div>
             </div>
         </div>
     </div>
+    <script>
+        var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
+
+        $(
+            function () {
+                fetchData(chart);
+            }
+        );
+
+        function fetchData() {
+            $.ajax({
+                type: "GET",
+                url: "/pqfx/fx_Ajax/",
+                dataType: 'json',
+                success: function (result) {
+                    chart.setOption(result.data);
+                }
+            });
+        }
+    </script>
 {% endblock %}

@@ -3,6 +3,7 @@ from . import views
 
 #填写 login,update,delete 路由
 urlpatterns = [
+    path('file_up/', views.file_up),
     path('pc/', views.pc),
     path('pc_Ajax/', views.pc_Ajax),
     path('qx/', views.qx),

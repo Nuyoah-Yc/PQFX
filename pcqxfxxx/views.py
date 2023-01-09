@@ -9,15 +9,43 @@ import redis
 import time
 # 进度条库
 from tqdm import tqdm
+# pandas库
+import pandas as pd
+# numpy库
+import numpy as np
+# os库
+import os
 
 from .models import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 # 线程库
 # Create your views here.
 
+
+
+@csrf_exempt
+def file_up(request):
+    # 获取前端POST的文件数据
+    file = request.FILES.get('file')
+    file_name = time.strftime('%Y-%m-%d') + file.name
+    # 保存文件到/file文件夹下
+    with open('file/' + file_name, 'wb') as f:
+        for line in file:
+            f.write(line)
+    # 判断file目录下文件是否存在
+    if os.path.exists('file/' + file_name):
+        data = {
+            'text': '文件上传成功',
+        }
+        return JsonResponse(data)
+    else:
+        data = {
+            'text': '文件上传失败',
+        }
+        return JsonResponse(data)
 
 @csrf_exempt
 def pc_Ajax(request):
@@ -86,27 +114,41 @@ def pc_Ajax(request):
 def qx_Ajax(request):
     if request.POST.get('id') == '1':
         # 数据集中存在字段缺失、空行、单位不统一、有重复数据等问题，请你使用NumPy和Pandas对数据进行清洗，具体要求如下：
-        # 1.缺失的体重和年龄字段使用均值填充；
-        # 2.缺失的爱好字段使用高频词填充；
+        # 读取file文件夹下的mk2.xlsx文件
+        df = pd.read_excel('file/mk2_list.xlsx')
+        # 第一列为名字，第二列为年龄，第三列为身高，第三列为体重，第五列为ip，第六列为地区
+        df.columns = ['name', 'age', 'height', 'weight', 'ip', 'area']
+
+        # 1.缺失的体重和年龄字段使用均值填充，并且为整数
+        df['age'] = df['age'].fillna(df['age'].mean()).astype(int)
+        df['weight'] = df['weight'].fillna(df['weight'].mean()).astype(int)
+        # 2.缺失的ip字段使用高频词填充；
+        df['ip'] = df['ip'].fillna(df['ip'].mode()[0])
         # 3.身高单位统一为cm；
+        # 查寻身高中有m或米的数据
+        df1 = df[df['height'].str.contains('m|米')]
+        print(df1)
+        # 将身高单位的米和m去除
+        # df['height'] = df['height'].str.replace('m', '').str.replace('米', '')
+        # print(df)
         # 4.体重单位统一为kg；
         # 5.空行直接删除；
         # 6.重复数据只保留一条；
         # 7.将清洗后的数据通过DjangoORM保存到MySQL数据库中
-        pass
+        return JsonResponse({'text': '数据清洗完成'})
 
 
 
 @csrf_exempt
 def fx_Ajax(request):
-    if request.POST.get('id') == '1':
-        # 【任务1】读取所需数据集后，给用户数据中增加省份字段记录用户的归属地，分析该视频网站中会员用户在中国各地区的分布情况并绘制出会员分布图。绘图要求如下：
-        # 1.使用PyEcharts库绘制会员分布地图；
-        # 2.使用Django框架在前端页面中渲染展示会员分布图；
-        # 【任务2】读取所需数据集后，分析不同类型的用户留存情况，并绘制用户留存矩阵图, 横轴为不同类型的用户留存率，纵轴为活跃用户的数量。绘图要求如下：
-        # 1.使用PyEcharts库绘制留存矩阵图；
-        # 2.使用Django框架在前端页面中渲染展示留存矩阵图
-        pass
+        if request.POST.get('id') == '1':
+            # 【任务1】读取所需数据集后，给用户数据中增加省份字段记录用户的归属地，分析该视频网站中会员用户在中国各地区的分布情况并绘制出会员分布图。绘图要求如下：
+            # 1.使用PyEcharts库绘制会员分布地图；
+            # 2.使用Django框架在前端页面中渲染展示会员分布图；
+            # 【任务2】读取所需数据集后，分析不同类型的用户留存情况，并绘制用户留存矩阵图, 横轴为不同类型的用户留存率，纵轴为活跃用户的数量。绘图要求如下：
+            # 1.使用PyEcharts库绘制留存矩阵图；
+            # 2.使用Django框架在前端页面中渲染展示留存矩阵图
+            pass
 
 
 @csrf_exempt
@@ -150,13 +192,20 @@ def text_Ajax(request):
         # # 显示所有的vlaue
         # for key in keys:
         #     print(key, conn.get(key).decode())
+        from pyecharts import options as opts
+        from pyecharts.charts import Map
+        from pyecharts.faker import Faker
 
-
-
-
-
-        return JsonResponse({'text': '数据接收成功'})
-
+        c = (
+            Map()
+            .add("商家A", [list(z) for z in zip(Faker.provinces, Faker.values())], "china")
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title="Map-VisualMap（连续型）"),
+                visualmap_opts=opts.VisualMapOpts(max_=200),
+            )
+            .render("map_visualmap.html")
+        )
+        return HttpResponse(c)
 
 def pc(request):
     if request.method == 'GET':
@@ -176,19 +225,11 @@ def pc(request):
 
 
 def qx(request):
-    if request.method == 'GET':
-        return render(request, 'qx.html')
-    else:
-        data = '数据清洗完成'
-        return render(request, 'qx.html', locals())
+    return render(request, 'qx.html', locals())
 
 
 def fx(request):
-    if request.method == 'GET':
-        return render(request, 'fx.html')
-    else:
-        data = '数据分析完成'
-        return render(request, 'fx.html', locals())
+    return render(request, 'fx.html')
 
 
 def xx(request):
